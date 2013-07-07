@@ -1,50 +1,41 @@
-#!/bin/sh
-#thanks to dpm i just changed up the commands xD
+#!/bin/bash
 
-ACTION=`printf "playlist\npause/play\nnext\nprevious\nstart\nexit\nopen\nload\nshuffle\nrepeat\n" | dmenu -i $*`
+# changed loading: now use a predefined folder with playlists (this is much faster than find)
+
+# requires: gen_playlists.sh, mocp, dmenu, urxvt
+
+ACTION=`printf "playlist\nstart\nexit\nopen\nload\nshuffle\nrepeat\n" | dmenu -i $*`
+root="$HOME/music/pls"
 
 if [ "$ACTION" == 'playlist' ]; then
-  mocp -p
-fi
-
-if [ "$ACTION" == 'pause/play' ]; then
-  mocp -G
-fi
-
-if [ "$ACTION" == 'next' ]; then
-  mocp -f  
-fi
-
-if [ "$ACTION" == 'previous' ]; then
-  mocp -r
+	mocp -p
 fi
 
 if [ "$ACTION" == 'start' ]; then
-  mocp -S
-  dmenu_mocp
+	mocp -S
+	$0
 fi
 
 if [ "$ACTION" == 'exit' ]; then
-  mocp -x
+	mocp -x
 fi
 
 if [ "$ACTION" == 'open' ]; then 
-  xterm -e mocp
+	urxvt -e mocp
 fi
 
 if [ "$ACTION" == 'load' ]; then
-  mocp -c &&
-  play=`find ~/ -name *.m3u | dmenu -i $*`
-  echo $play
-  mocp -a "$play"
-  mocp -p
+	mocp -c && play=$(ls $root | sed 's/\.m3u//' | dmenu -i $*)
+	if [[ -n $play ]] ; then
+		mocp -a "$root/${play}.m3u"
+		mocp -p
+	fi
 fi
 
 if [ "$ACTION" == 'shuffle' ]; then
-  mocp -t shuffle
+	mocp -t shuffle
 fi
 
 if [ "$ACTION" == 'repeat' ]; then
-  mocp -t repeat	
+	mocp -t repeat	
 fi
-
