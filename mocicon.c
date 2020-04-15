@@ -2,7 +2,7 @@
 //compile with gcc -Wall -g mocicon.c -o mocicon `pkg-config --cflags --libs gtk+-2.0`
 #include <gtk/gtk.h> 
 
-#define TERMINAL "xterm -C mocp"
+#define TERMINAL "terminator mocp"
 
 static char *notify = "bash -c 'notify-send -t 2000 \"$(mocp -i 2>/dev/null | grep Artist)\" \"$(mocp -i 2>/dev/null | grep Song)\" -i gtk-cdrom'";
 GtkWidget *menu, *quit_item, *launch_item, *play_item, *stop_item, *start_item, *next_item, *prev_item; 
